@@ -34,7 +34,13 @@ public class Main {
         for (CANFrame canFrame:canFrameList)
             frameSet.add(canFrame.getFrame());
         List<CANMessage> canMessageList = DataParser.getCANMessageData(canMessageFile, frameSet); // Reading and parsing CANMessage file
-        SensorOutputEstimator.computeSensorOutput(gpsData,canFrameList, canMessageList); // Computing sensor output
+        List<Observer> observerList = new ArrayList<>();
+        observerList.add(new DisplayOutput());
+        Frame frame = new Frame();
+        observerList.add(frame);
+        SensorOutputEstimator sensorOutputEstimator = new SensorOutputEstimator(gpsData,canFrameList, canMessageList, observerList);
+        frame.setSensorOutputEstimator(sensorOutputEstimator);
+        sensorOutputEstimator.computeSensorOutput(); // Computing sensor output
     }
 
 }

@@ -5,35 +5,45 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Observer;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class SensorOutputEstimator {
 
+    List<Pair<Float, Float>> gpsData;
+    List<CANFrame> canFrameList;
+    List<CANMessage> canMessageList;
+    List<Observer> observerList;
+    SensorOutput sensorOutput;
+
+    SensorOutputEstimator(List<Pair<Float, Float>> gpsData, List<CANFrame> canFrameList,
+                          List<CANMessage> canMessageList, List<Observer> observerList){
+        this.gpsData = gpsData;
+        this.canFrameList = canFrameList;
+        this.canMessageList = canMessageList;
+        this.observerList = observerList;
+        sensorOutput = new SensorOutput();
+        for(Observer observer:observerList){
+            sensorOutput.addObserver(observer);
+        }
+    }
+
     /**
      * For Each CANFrame we compute the sensor value using the canMessageMap. We add gps data at its specific offset.
-     * @param gpsData contains the gps data that needs to be added to sensor output
-     * @param canFrameList contains the list of CANFrame for which we need to compute sensor value
-     * @param canMessageList contains the list of CANMessage. Using this we compute the sensor value.
      * @return List<SensorOutput> that contains list of SensorOutput
      */
-    public static void computeSensorOutput(List<Pair<Float, Float>> gpsData, List<CANFrame> canFrameList,
-                                                         List<CANMessage> canMessageList) {
+    public void computeSensorOutput() {
         int pos = 0;
         long prev = 0;
-        Frame frame = new Frame();
-        frame.setVisible(true);
-        SensorOutput sensorOutput = new SensorOutput();
-        //sensorOutput.addObserver(new DisplayOutput());
-        sensorOutput.addObserver(frame);
-        sensorOutput.setOffset((float) 0.0);
+        sensorOutput.setOffset(""+0.0);
         sensorOutput.setGpsLatitude("" + gpsData.get(pos).getKey()+"°");
         sensorOutput.setGpsLongitude("" + gpsData.get(pos).getValue()+"°");
         for(CANMessage canMessage:canMessageList){
             // Compute the sensor value for a given CANFrame and CANMessage
             for(CANFrame canFrame:canFrameList){
                 if(canMessage.getFrame().equalsIgnoreCase(canFrame.getFrame())){
-                    sensorOutput.setOffset(canMessage.getTimeOffset());
+                    sensorOutput.setOffset(""+canMessage.getTimeOffset());
                     if(pos*1000<=canMessage.getTimeOffset() && pos<gpsData.size()){
                         sensorOutput.setGpsLatitude("" + gpsData.get(pos).getKey()+"°");
                         sensorOutput.setGpsLongitude("" + gpsData.get(pos).getValue()+"°");
@@ -71,7 +81,7 @@ public class SensorOutputEstimator {
         }
     }
 
-    private static void delay(long offset) {
+    private void delay(long offset) {
         try {
             TimeUnit.MILLISECONDS.sleep(offset);
         } catch (InterruptedException e) {
@@ -85,7 +95,7 @@ public class SensorOutputEstimator {
      * @param canMessage CANMessage that contains the offset and data of the given frame
      * @return the computed sensor value
      */
-    public static float compute(CANFrame canFrame, CANMessage canMessage){
+    public float compute(CANFrame canFrame, CANMessage canMessage){
         float result;
         // Get the substring of data starting from the starting byte and convert it to binary string
         String binary = new BigInteger(canMessage.getData().substring(canFrame.getDataStartByte()), 16).toString(2);

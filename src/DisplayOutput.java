@@ -17,7 +17,7 @@ public class DisplayOutput implements Observer {
             System.out.format("%-15s\t%-20s%-20s%-20s%-20s%-20s%-20s%n","Current Time","Vehicle Speed",
                     "SteerAngle","YawRate","LatAccel","LongAccel","GPSLat/Long");
         }
-        System.out.format("%13.1f\t%-20s%-20s%-20s%-20s%-20s%-20s\r",s.getOffset(), s.getVehicleSpeed(),
+        System.out.format("%15s\t%-20s%-20s%-20s%-20s%-20s%-20s\r",s.getOffset(), s.getVehicleSpeed(),
                 s.getSteeringWheelAngle(), s.getYawRate(), s.getLateralAcceleration(), s.getLongitudinalAcceleration(),
                 s.getGpsLatitude()+" "+s.getGpsLongitude());
     }

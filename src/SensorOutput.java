@@ -7,7 +7,7 @@ import java.util.Observable;
  */
 public class SensorOutput extends Observable {
 
-    private Float offset; // Offset
+    private String offset; // Offset
     private String steeringWheelAngle = "-";
     private String vehicleSpeed = "-";
     private String yawRate = "-";
@@ -19,7 +19,7 @@ public class SensorOutput extends Observable {
     public SensorOutput() {
     }
 
-    public SensorOutput(Float offset, String steeringWheelAngle, String vehicleSpeed, String yawRate,
+    public SensorOutput(String offset, String steeringWheelAngle, String vehicleSpeed, String yawRate,
                         String longitudinalAcceleration, String lateralAcceleration, String gpsLatitude, String gpsLongitude) {
         this.offset = offset;
         this.steeringWheelAngle = steeringWheelAngle;
@@ -31,11 +31,11 @@ public class SensorOutput extends Observable {
         this.gpsLongitude = gpsLongitude;
     }
 
-    public Float getOffset() {
+    public String getOffset() {
         return offset;
     }
 
-    public void setOffset(Float offset) {
+    public void setOffset(String offset) {
         this.offset = offset;
     }
 
