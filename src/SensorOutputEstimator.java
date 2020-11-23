@@ -21,8 +21,11 @@ public class SensorOutputEstimator {
                                                          List<CANMessage> canMessageList) {
         int pos = 1;
         long prev = 0;
+        Frame frame = new Frame();
+        frame.setVisible(true);
         SensorOutput sensorOutput = new SensorOutput();
-        sensorOutput.addObserver(new DisplayOutput());
+        //sensorOutput.addObserver(new DisplayOutput());
+        sensorOutput.addObserver(frame);
         sensorOutput.setOffset((float) 0.0);
         sensorOutput.setGpsLatitude("" + gpsData.get(pos).getKey()+"°");
         sensorOutput.setGpsLongitude("" + gpsData.get(pos).getValue()+"°");
