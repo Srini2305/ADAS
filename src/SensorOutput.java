@@ -55,6 +55,8 @@ public class SensorOutput extends Observable {
 
     public void setVehicleSpeed(String vehicleSpeed) {
         this.vehicleSpeed = vehicleSpeed;
+        setChanged();
+        notifyObservers();
     }
 
     public String getYawRate() {
@@ -63,6 +65,8 @@ public class SensorOutput extends Observable {
 
     public void setYawRate(String yawRate) {
         this.yawRate = yawRate;
+        setChanged();
+        notifyObservers();
     }
 
     public String getLongitudinalAcceleration() {
@@ -71,6 +75,8 @@ public class SensorOutput extends Observable {
 
     public void setLongitudinalAcceleration(String longitudinalAcceleration) {
         this.longitudinalAcceleration = longitudinalAcceleration;
+        setChanged();
+        notifyObservers();
     }
 
     public String getLateralAcceleration() {
@@ -79,6 +85,8 @@ public class SensorOutput extends Observable {
 
     public void setLateralAcceleration(String lateralAcceleration) {
         this.lateralAcceleration = lateralAcceleration;
+        setChanged();
+        notifyObservers();
     }
 
     public String getGpsLatitude() {
@@ -87,6 +95,8 @@ public class SensorOutput extends Observable {
 
     public void setGpsLatitude(String gpsLatitude) {
         this.gpsLatitude = gpsLatitude;
+        setChanged();
+        notifyObservers();
     }
 
     public String getGpsLongitude() {
@@ -95,5 +105,7 @@ public class SensorOutput extends Observable {
 
     public void setGpsLongitude(String gpsLongitude) {
         this.gpsLongitude = gpsLongitude;
+        setChanged();
+        notifyObservers();
     }
 }
