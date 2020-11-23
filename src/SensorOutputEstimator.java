@@ -19,7 +19,7 @@ public class SensorOutputEstimator {
      */
     public static void computeSensorOutput(List<Pair<Float, Float>> gpsData, List<CANFrame> canFrameList,
                                                          List<CANMessage> canMessageList) {
-        int pos = 1;
+        int pos = 0;
         long prev = 0;
         Frame frame = new Frame();
         frame.setVisible(true);
@@ -34,7 +34,7 @@ public class SensorOutputEstimator {
             for(CANFrame canFrame:canFrameList){
                 if(canMessage.getFrame().equalsIgnoreCase(canFrame.getFrame())){
                     sensorOutput.setOffset(canMessage.getTimeOffset());
-                    if(pos*1000>=canMessage.getTimeOffset() && pos<gpsData.size()){
+                    if(pos*1000<=canMessage.getTimeOffset() && pos<gpsData.size()){
                         sensorOutput.setGpsLatitude("" + gpsData.get(pos).getKey()+"°");
                         sensorOutput.setGpsLongitude("" + gpsData.get(pos).getValue()+"°");
                         pos++;
@@ -66,6 +66,7 @@ public class SensorOutputEstimator {
         while(pos<gpsData.size()){
             sensorOutput.setGpsLatitude("" + gpsData.get(pos).getKey()+"°");
             sensorOutput.setGpsLongitude("" + gpsData.get(pos).getValue()+"°");
+            delay(1000);
             pos++;
         }
     }

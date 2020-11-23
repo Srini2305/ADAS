@@ -35,7 +35,6 @@ public class Main {
             frameSet.add(canFrame.getFrame());
         List<CANMessage> canMessageList = DataParser.getCANMessageData(canMessageFile, frameSet); // Reading and parsing CANMessage file
         SensorOutputEstimator.computeSensorOutput(gpsData,canFrameList, canMessageList); // Computing sensor output
-        //DisplayOutput.printSensorOutput(sensorOutputList); //Printing sensor output
     }
 
 }
