@@ -69,7 +69,9 @@ public class Frame extends JFrame implements Observer {
     }
 
     public void callCompute(){
-        sensorOutputEstimator.computeSensorOutput(); // Computing sensor output
+        Main.thread.stop();
+        Main.thread = new Thread(Main::startGUI);
+        Main.thread.start();
     }
 
     public void setSensorOutputEstimator(SensorOutputEstimator sensorOutputEstimator) {

@@ -17,6 +17,13 @@ public class Main {
     private static final String CAN_FRAME_FILENAME = "CAN Frames Info.txt"; // Default filename for CAN_FRAME
     private static final String CAN_MESSAGE_FILENAME = "19 CANMessages.trc"; // Default filename for CAN_MESSAGE
 
+    static Thread thread = new Thread(Main::startGUI);
+    static Frame frame = new Frame();
+    static List<Pair<Float, Float>> gpsData;
+    static List<CANFrame> canFrameList;
+    static List<CANMessage> canMessageList;
+    static List<Observer> observerList = new ArrayList<>();
+
     public static void main(String[] args) {
         String gpsFile = GPS_FILENAME;
         String canFrameFile = CAN_FRAME_FILENAME;
@@ -27,19 +34,24 @@ public class Main {
             canFrameFile = args[1]; //Second filename is CAN Frame file
             canMessageFile = args[2]; // Third filename is CAN Message file
         }
-        List<Pair<Float, Float>> gpsData = DataParser.getGPSData(gpsFile); // Reading and parsing gps file
-        List<CANFrame> canFrameList = DataParser.getCANFrameData(canFrameFile); // Reading and parsing CANFrame file
+        gpsData = DataParser.getGPSData(gpsFile); // Reading and parsing gps file
+        canFrameList = DataParser.getCANFrameData(canFrameFile); // Reading and parsing CANFrame file
         //Storing unique Frame IDs in Set<String> frameSet
         Set<String> frameSet = new HashSet<>();
         for (CANFrame canFrame:canFrameList)
             frameSet.add(canFrame.getFrame());
-        List<CANMessage> canMessageList = DataParser.getCANMessageData(canMessageFile, frameSet); // Reading and parsing CANMessage file
-        List<Observer> observerList = new ArrayList<>();
+        canMessageList = DataParser.getCANMessageData(canMessageFile, frameSet); // Reading and parsing CANMessage file
+        observerList = new ArrayList<>();
         observerList.add(new DisplayOutput());
-        Frame frame = new Frame();
         observerList.add(frame);
-        SensorOutputEstimator sensorOutputEstimator = new SensorOutputEstimator(gpsData,canFrameList, canMessageList, observerList);
+        /*SensorOutputEstimator sensorOutputEstimator = new SensorOutputEstimator(gpsData,canFrameList, canMessageList, observerList);
         frame.setSensorOutputEstimator(sensorOutputEstimator);
+        sensorOutputEstimator.computeSensorOutput(); // Computing sensor output*/
+    }
+
+    public static void startGUI(){
+        SensorOutputEstimator sensorOutputEstimator = new SensorOutputEstimator(gpsData,canFrameList, canMessageList, observerList);
+        //frame.setSensorOutputEstimator(sensorOutputEstimator);
         sensorOutputEstimator.computeSensorOutput(); // Computing sensor output
     }
 
