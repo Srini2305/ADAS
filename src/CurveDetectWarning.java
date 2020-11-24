@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CurveDetectWarning {
+
     public ArrayList<ArrayList<String>> curveDetect(List<CurveObject> curveObjects){
         ArrayList<ArrayList<String>> message = new ArrayList<>();
         for(int i = 0;i<curveObjects.size();i++){
