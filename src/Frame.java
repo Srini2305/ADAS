@@ -151,6 +151,7 @@ public class Frame extends JFrame implements Observer {
             speedList = new ArrayList<>();
             float speed = Float.parseFloat(s.getVehicleSpeed().substring(0, s.getVehicleSpeed().length()-4));
             speedList.add(speed);
+            speed = (float) (Math.round(speed*10)/10.0);
             curveObject.setAverageSpeed(speed);
             if(speed>50){
                 curveObject.setSpeedLevel("High");
@@ -184,6 +185,7 @@ public class Frame extends JFrame implements Observer {
         for(Float speed:speedList)
             averageSpeed+=speed;
         averageSpeed/=speedList.size();
+        averageSpeed = (float) (Math.round(averageSpeed*10)/10.0);
         curveObject.setAverageSpeed(averageSpeed);
         if(averageSpeed>50){
             curveObject.setSpeedLevel("High");
@@ -203,7 +205,7 @@ public class Frame extends JFrame implements Observer {
             double dist = distance(s.getGpsLatitude(),curveObject.getEntryLatitude(),
                     s.getGpsLongitude(), curveObject.getEntryLongitude());
             warningText.setText(curveObject.getDirection()+" Curve ahead within a distance(meters) of "+ dist
-                    +". Average Speed: "+ curveObject.getAverageSpeed());
+                    +". Average Speed: "+ curveObject.getAverageSpeed()+"km/h");
         } else {
             warningText.setText("-");
         }
