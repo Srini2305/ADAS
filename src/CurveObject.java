@@ -1,3 +1,6 @@
+/**
+ * CurveObject.java - Model class for Curve Object
+ */
 public class CurveObject {
 
     private String entryLatitude;

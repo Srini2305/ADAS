@@ -2,13 +2,13 @@ import javafx.util.Pair;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Observer;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
+/**
+ * SensorOutputEstimator.java - Class for finding the required sensor data
+ */
 public class SensorOutputEstimator {
 
     List<Pair<Float, Float>> gpsData;

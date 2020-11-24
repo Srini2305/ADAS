@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+/**
+ * Frame.java - Class to create frame and add panel components. Observer class to gather required data
+ */
 public class Frame extends JFrame implements Observer {
 
     private final JLabel currentTime = new JLabel("Current Time(ms)");
@@ -34,6 +37,9 @@ public class Frame extends JFrame implements Observer {
     boolean curveEnd = false;
     int pos = 0;
 
+    /**
+     * Frame - Constructor to add panel and panel components
+     */
     Frame(){
         JPanel p1 = new JPanel();
         p1.setLayout(new GridLayout(9, 2));
@@ -67,13 +73,18 @@ public class Frame extends JFrame implements Observer {
         this.setVisible(true);
     }
 
+    /**
+     * update - Default function of observer which calls computeWarnings to set values
+     * @param o
+     * @param arg
+     */
     @Override
     public void update(Observable o, Object arg) {
         SensorOutput s = (SensorOutput) o;
-
         if(!s.getSteeringWheelAngle().equals("-")){
             computeCurve(s);
         }
+        // Setting message text
         if(curveStart){
             messageText.setText(curveObject.getSpeedLevel()+" speed "+ curveObject.getDirection() + " curve detected");
         } else if (!curveStart && curveEnd){
@@ -82,7 +93,8 @@ public class Frame extends JFrame implements Observer {
                     " Avg Speed:" +curveObject.getAverageSpeed() +". "+curveObject.getSpeedLevel() +" Speed "
                     +curveObject.getDirection() + " Curve");
         }
-        computeWarning(s);
+        computeWarning(s); // Function to detect the warning
+        // Setting values to the labels
         timeText.setText(s.getOffset());
         vehicleText.setText(s.getVehicleSpeed());
         steerText.setText(s.getSteeringWheelAngle());
@@ -92,6 +104,9 @@ public class Frame extends JFrame implements Observer {
         gpsText.setText(s.getGpsLatitude()+" "+ s.getGpsLongitude());
     }
 
+    /**
+     *callCompute - Action listener for start button
+     */
     public void callCompute(){
         Main.thread.stop();
         if(curveStart && !curveEnd){
@@ -116,6 +131,10 @@ public class Frame extends JFrame implements Observer {
         Main.thread.start();
     }
 
+    /**
+     * computeCurve - Function to compute the direction and type of curve
+     * @param s - SensorOutput Object passed as parameter
+     */
     public void computeCurve(SensorOutput s){
         String steeringWheelAngle = s.getSteeringWheelAngle().substring(0,s.getSteeringWheelAngle().length()-1);
         float steeringAngle = Float.parseFloat(steeringWheelAngle);
@@ -154,6 +173,10 @@ public class Frame extends JFrame implements Observer {
         }
     }
 
+    /**
+     * updateSpeed - function to compute the average speed of the present curve
+     * @param s - SensorOutput Object passed as parameter
+     */
     public void updateSpeed(SensorOutput s){
         float sp = Float.parseFloat(s.getVehicleSpeed().substring(0, s.getVehicleSpeed().length()-4));
         speedList.add(sp);
@@ -169,6 +192,10 @@ public class Frame extends JFrame implements Observer {
         }
     }
 
+    /**
+     * computeWarning - Function to compute distance from particular point to curve and set the warning
+     * @param s - SensorOutput Object passed as parameter
+     */
     public void computeWarning(SensorOutput s){
         if(pos<curveObjectHistory.size() &&
                 Float.parseFloat(s.getOffset())>=curveObjectHistory.get(pos).getEntryOffset()-3000){
@@ -185,6 +212,14 @@ public class Frame extends JFrame implements Observer {
         }
     }
 
+    /**
+     * distance - function to compute the distance between two points using latitude and longitude position
+     * @param la1 - latitude1
+     * @param la2 - latitude2
+     * @param lo1 - longitude1
+     * @param lo2 - longitude2
+     * @return
+     */
     private double distance(String la1, String la2, String lo1, String lo2){
         double lon1 = Math.toRadians(Double.parseDouble(lo1.substring(0,lo1.length()-1)));
         double lon2 = Math.toRadians(Double.parseDouble(lo2.substring(0,lo2.length()-1)));
@@ -192,6 +227,7 @@ public class Frame extends JFrame implements Observer {
         double lat2 = Math.toRadians(Double.parseDouble(la2.substring(0,la2.length()-1)));
         double dlon = lon2 - lon1;
         double dlat = lat2 - lat1;
+        // Computing the distance based on latitude and longitude
         double a = Math.pow(Math.sin(dlat / 2), 2)
                 + Math.cos(lat1) * Math.cos(lat2)
                 * Math.pow(Math.sin(dlon / 2),2);

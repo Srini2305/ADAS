@@ -1,15 +1,9 @@
 import javafx.util.Pair;
 
-import javax.swing.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.*;
 
 /**
- * @author srini
- * @since 10/18/2020
+ * Main.java - Main class for invocation
  */
 public class Main {
 
@@ -47,7 +41,8 @@ public class Main {
     }
 
     public static void startGUI(){
-        SensorOutputEstimator sensorOutputEstimator = new SensorOutputEstimator(gpsData,canFrameList, canMessageList, observerList);
+        SensorOutputEstimator sensorOutputEstimator = new SensorOutputEstimator(gpsData,canFrameList, canMessageList,
+                observerList);
         sensorOutputEstimator.computeSensorOutput(); // Computing sensor output
     }
 

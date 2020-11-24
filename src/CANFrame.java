@@ -1,7 +1,5 @@
 /**
- * POJO to store the contents of CANFrame
- * @author srini
- * @since 10/18/2020
+ * CANFrame.java - POJO to store the contents of CANFrame
  */
 public class CANFrame {
 

@@ -1,7 +1,5 @@
 /**
- * POJO to store the contents of CANMessage
- * @author srini
- * @since 10/18/2020
+ * CANMessage.java - POJO to store the contents of CANMessage
  */
 public class CANMessage {
 

@@ -1,11 +1,14 @@
 import java.util.Observable;
 import java.util.Observer;
 
+/**
+ * DisplayOut.java - Class for displaying output in the console
+ */
 public class DisplayOutput implements Observer {
 
     public boolean printed = false;
     /**
-     * Prints the list of SensorOutput in the console
+     * update - Prints the list of SensorOutput in the console
      */
     @Override
     public void update(Observable o, Object arg) {

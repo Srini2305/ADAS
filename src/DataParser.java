@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
+/**
+ * DataParser - Class for reading data from the files
+ */
 public class DataParser {
 
     private static final int GPS_START_LINE = 51; // Start line to parse for GPS file

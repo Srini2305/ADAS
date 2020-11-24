@@ -1,13 +1,11 @@
 import java.util.Observable;
 
 /**
- * POJO to store the contents of SensorOutput
- * @author srini
- * @since 10/18/2020
+ * SensorOutput.java - Model Class to store the contents of SensorOutput
  */
 public class SensorOutput extends Observable {
 
-    private String offset; // Offset
+    private String offset; // Time Offset
     private String steeringWheelAngle = "-";
     private String vehicleSpeed = "-";
     private String yawRate = "-";
