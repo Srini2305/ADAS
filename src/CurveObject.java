@@ -1,32 +1,69 @@
 public class CurveObject {
-    private float curveEntry;
-    private float curveExit;
-    private String type;
+
+    private String entryLatitude;
+    private String entryLongitude;
+    private String exitLatitude;
+    private String exitLongitude;
+    private float entryOffset;
+    private float exitOffset;
+    private String speedLevel;
     private float averageSpeed;
     private String direction;
 
-    public float getCurveEntry() {
-        return curveEntry;
+    public String getEntryLatitude() {
+        return entryLatitude;
     }
 
-    public void setCurveEntry(float curveEntry) {
-        this.curveEntry = curveEntry;
+    public void setEntryLatitude(String entryLatitude) {
+        this.entryLatitude = entryLatitude;
     }
 
-    public float getCurveExit() {
-        return curveExit;
+    public String getEntryLongitude() {
+        return entryLongitude;
     }
 
-    public void setCurveExit(float curveExit) {
-        this.curveExit = curveExit;
+    public void setEntryLongitude(String entryLongitude) {
+        this.entryLongitude = entryLongitude;
     }
 
-    public String getType() {
-        return type;
+    public String getExitLatitude() {
+        return exitLatitude;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setExitLatitude(String exitLatitude) {
+        this.exitLatitude = exitLatitude;
+    }
+
+    public String getExitLongitude() {
+        return exitLongitude;
+    }
+
+    public void setExitLongitude(String exitLongitude) {
+        this.exitLongitude = exitLongitude;
+    }
+
+    public float getEntryOffset() {
+        return entryOffset;
+    }
+
+    public void setEntryOffset(float entryOffset) {
+        this.entryOffset = entryOffset;
+    }
+
+    public float getExitOffset() {
+        return exitOffset;
+    }
+
+    public void setExitOffset(float exitOffset) {
+        this.exitOffset = exitOffset;
+    }
+
+    public String getSpeedLevel() {
+        return speedLevel;
+    }
+
+    public void setSpeedLevel(String speedLevel) {
+        this.speedLevel = speedLevel;
     }
 
     public float getAverageSpeed() {

@@ -8,8 +8,8 @@ public class CurveDetectWarning {
             ArrayList<String> curveMessage = new ArrayList<>();
             double time;
             double distance;
-            time = Float.parseFloat(String.valueOf(curveObjects.get(i).getCurveExit()-
-                    curveObjects.get(i).getCurveEntry())) - 0.05;
+            time = Float.parseFloat(String.valueOf(curveObjects.get(i).getExitOffset()-
+                    curveObjects.get(i).getEntryOffset())) - 0.05;
             curveMessage.add(""+time);
             distance = computeDistance(time,curveObjects.get(i).getAverageSpeed());
             curveMessage.add(""+distance);

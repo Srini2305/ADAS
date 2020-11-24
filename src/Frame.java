@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -26,8 +27,11 @@ public class Frame extends JFrame implements Observer {
 
     SensorOutputEstimator sensorOutputEstimator;
 
-    ArrayList<CurveObject> curveObjects = new ArrayList<>();
+    ArrayList<CurveObject> curveObjectList = new ArrayList<>();
     CurveObject curveObject = new CurveObject();
+    ArrayList<Float> speedList = new ArrayList<>();
+    boolean curveStart = false;
+    boolean curveEnd = false;
     boolean flag = false;
     String messageValue = null;
 
@@ -65,12 +69,17 @@ public class Frame extends JFrame implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         SensorOutput s = (SensorOutput) o;
-        if(flag == true){
-            curveObject.setCurveExit(Float.parseFloat(s.getOffset()));
-            curveObjects.add(curveObject);
-            curveObject = new CurveObject();
-            flag = false;
-            message.setText(curveObject.getType());
+
+        if(!s.getSteeringWheelAngle().equals("-")){
+            computeCurve(s);
+        }
+        if(curveStart){
+            message.setText(curveObject.getSpeedLevel()+" speed "+ curveObject.getDirection() + " curve detected");
+        } else if (!curveStart && curveEnd){
+            message.setText("Curve Start: "+curveObject.getEntryLatitude()+" "+curveObject.getEntryLongitude()+"," +
+                    " Curve End: "+curveObject.getExitLatitude()+" "+curveObject.getExitLongitude()+ ", Average Speed:"
+                    +curveObject.getAverageSpeed() +", Curve Type: "+curveObject.getSpeedLevel()
+                    +", Curve Direction"+curveObject.getDirection());
         }
         timeText.setText(s.getOffset());
         vehicleText.setText(s.getVehicleSpeed());
@@ -91,8 +100,9 @@ public class Frame extends JFrame implements Observer {
         this.sensorOutputEstimator = sensorOutputEstimator;
     }
 
-    public void computeCurve(SensorOutput s){
-        double radiusOfCurvature = Double.parseDouble(s.getVehicleSpeed()) / Double.parseDouble(s.getYawRate());
+    /*public void computeCurve(SensorOutput s){
+        double radiusOfCurvature = Double.parseDouble(s.getVehicleSpeed().substring(0,s.getVehicleSpeed().length()-4))
+                / Double.parseDouble(s.getYawRate().substring(0,s.getYawRate().length()-3));
         double angle = 1 / Math.cos(1/radiusOfCurvature);
         if(angle >= 30 && angle <= 180){
             Double acceleration = Math.pow(Double.parseDouble(s.getVehicleSpeed()),2) / radiusOfCurvature;
@@ -109,6 +119,59 @@ public class Frame extends JFrame implements Observer {
             curveObject.setCurveEntry(Float.parseFloat(s.getOffset()));
             flag = true;
             message.setText(curveObject.getType()+" speed"+ curveObject.getDirection() + " curve detected");
+        }
+    }*/
+
+    public void computeCurve(SensorOutput s){
+        String steeringWheelAngle = s.getSteeringWheelAngle().substring(0,s.getSteeringWheelAngle().length()-1);
+        float steeringAngle = Float.parseFloat(steeringWheelAngle);
+        if(!curveStart && Math.abs(steeringAngle)>12){
+            curveObject.setEntryOffset(Float.parseFloat(s.getOffset()));
+            curveObject.setEntryLatitude(s.getGpsLatitude());
+            curveObject.setEntryLongitude(s.getGpsLongitude());
+            if(steeringAngle<0){
+                curveObject.setDirection("Left");
+            } else{
+                curveObject.setDirection("Right");
+            }
+            speedList = new ArrayList<>();
+            float speed = Float.parseFloat(s.getVehicleSpeed().substring(0, s.getVehicleSpeed().length()-4));
+            speedList.add(speed);
+            curveObject.setAverageSpeed(speed);
+            if(speed>50){
+                curveObject.setSpeedLevel("High");
+            } else {
+                curveObject.setSpeedLevel("Low");
+            }
+            curveStart = true;
+            curveEnd = true;
+        } else if(curveStart && Math.abs(steeringAngle)<=12){
+            curveObject.setExitOffset(Float.parseFloat(s.getOffset()));
+            curveObject.setExitLatitude(s.getGpsLatitude());
+            curveObject.setExitLongitude(s.getGpsLongitude());
+            updateSpeed(s);
+            speedList = new ArrayList<>();
+            curveStart = false;
+            curveObjectList.add(curveObject);
+            curveObject = new CurveObject();
+        } else if(curveStart && Math.abs(steeringAngle)>12){
+            updateSpeed(s);
+        }
+
+    }
+
+    public void updateSpeed(SensorOutput s){
+        float sp = Float.parseFloat(s.getVehicleSpeed().substring(0, s.getVehicleSpeed().length()-4));
+        speedList.add(sp);
+        float averageSpeed = 0;
+        for(Float speed:speedList)
+            averageSpeed+=speed;
+        averageSpeed/=speedList.size();
+        curveObject.setAverageSpeed(averageSpeed);
+        if(averageSpeed>50){
+            curveObject.setSpeedLevel("High");
+        } else {
+            curveObject.setSpeedLevel("Low");
         }
     }
 }
