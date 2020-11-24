@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -24,6 +25,11 @@ public class Frame extends JFrame implements Observer {
     public JLabel messageText = new JLabel();
 
     SensorOutputEstimator sensorOutputEstimator;
+
+    ArrayList<CurveObject> curveObjects = new ArrayList<>();
+    CurveObject curveObject = new CurveObject();
+    boolean flag = false;
+    String messageValue = null;
 
     Frame(){
         JPanel p1 = new JPanel();
@@ -59,6 +65,13 @@ public class Frame extends JFrame implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         SensorOutput s = (SensorOutput) o;
+        if(flag == true){
+            curveObject.setCurveExit(Float.parseFloat(s.getOffset()));
+            curveObjects.add(curveObject);
+            curveObject = new CurveObject();
+            flag = false;
+            message.setText(curveObject.getType());
+        }
         timeText.setText(s.getOffset());
         vehicleText.setText(s.getVehicleSpeed());
         steerText.setText(s.getSteeringWheelAngle());
@@ -76,5 +89,26 @@ public class Frame extends JFrame implements Observer {
 
     public void setSensorOutputEstimator(SensorOutputEstimator sensorOutputEstimator) {
         this.sensorOutputEstimator = sensorOutputEstimator;
+    }
+
+    public void computeCurve(SensorOutput s){
+        double radiusOfCurvature = Double.parseDouble(s.getVehicleSpeed()) / Double.parseDouble(s.getYawRate());
+        double angle = 1 / Math.cos(1/radiusOfCurvature);
+        if(angle >= 30 && angle <= 180){
+            Double acceleration = Math.pow(Double.parseDouble(s.getVehicleSpeed()),2) / radiusOfCurvature;
+            if(acceleration > Double.parseDouble(s.getVehicleSpeed())){
+                curveObject.setType("High");
+            }else{
+                curveObject.setType("Low");
+            }
+            if(radiusOfCurvature > 0){
+                curveObject.setDirection("Left");
+            }else{
+                curveObject.setDirection("Right");
+            }
+            curveObject.setCurveEntry(Float.parseFloat(s.getOffset()));
+            flag = true;
+            message.setText(curveObject.getType()+" speed"+ curveObject.getDirection() + " curve detected");
+        }
     }
 }
