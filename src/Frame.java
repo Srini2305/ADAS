@@ -64,7 +64,7 @@ public class Frame extends JFrame implements Observer {
         add(p1, "North");
         add(p2, "South");
         setVisible(true);
-        this.setSize(600, 800);
+        this.setExtendedState(this.MAXIMIZED_BOTH);
         this.setVisible(true);
     }
 
@@ -78,8 +78,8 @@ public class Frame extends JFrame implements Observer {
         if(curveStart){
             messageText.setText(curveObject.getSpeedLevel()+" speed "+ curveObject.getDirection() + " curve detected");
         } else if (!curveStart && curveEnd){
-            messageText.setText("Curve Start: "+curveObject.getEntryLatitude()+" "+curveObject.getEntryLongitude()+
-                    " Curve End: "+curveObject.getExitLatitude()+" "+curveObject.getExitLongitude()+
+            messageText.setText("Start: "+curveObject.getEntryLatitude()+" "+curveObject.getEntryLongitude()+
+                    " End: "+curveObject.getExitLatitude()+" "+curveObject.getExitLongitude()+
                     " Avg Speed:" +curveObject.getAverageSpeed() +". "+curveObject.getSpeedLevel() +" Speed "
                     +curveObject.getDirection() + " Curve");
         }
