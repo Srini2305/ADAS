@@ -44,14 +44,10 @@ public class Main {
         observerList = new ArrayList<>();
         observerList.add(new DisplayOutput());
         observerList.add(frame);
-        /*SensorOutputEstimator sensorOutputEstimator = new SensorOutputEstimator(gpsData,canFrameList, canMessageList, observerList);
-        frame.setSensorOutputEstimator(sensorOutputEstimator);
-        sensorOutputEstimator.computeSensorOutput(); // Computing sensor output*/
     }
 
     public static void startGUI(){
         SensorOutputEstimator sensorOutputEstimator = new SensorOutputEstimator(gpsData,canFrameList, canMessageList, observerList);
-        //frame.setSensorOutputEstimator(sensorOutputEstimator);
         sensorOutputEstimator.computeSensorOutput(); // Computing sensor output
     }
 

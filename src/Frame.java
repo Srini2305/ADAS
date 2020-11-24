@@ -1,13 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Observable;
 import java.util.Observer;
 
 public class Frame extends JFrame implements Observer {
 
-    private final JLabel currentTime = new JLabel("Current Time");
+    private final JLabel currentTime = new JLabel("Current Time(ms)");
     private final JLabel vehicleSpeed = new JLabel("Vehicle Speed");
     private final JLabel steerAngle = new JLabel("Steer Angle");
     private final JLabel yawRate = new JLabel("Yaw Rate");
@@ -27,10 +26,10 @@ public class Frame extends JFrame implements Observer {
     private final JLabel messageText = new JLabel("-");
     private final JLabel warningText = new JLabel("-");
 
-    ArrayList<CurveObject> curveObjectHistory = new ArrayList<>();
-    ArrayList<CurveObject> curveObjectList = new ArrayList<>();
-    CurveObject curveObject = new CurveObject();
-    ArrayList<Float> speedList = new ArrayList<>();
+    private ArrayList<CurveObject> curveObjectHistory = new ArrayList<>();
+    private ArrayList<CurveObject> curveObjectList = new ArrayList<>();
+    private CurveObject curveObject = new CurveObject();
+    private ArrayList<Float> speedList = new ArrayList<>();
     boolean curveStart = false;
     boolean curveEnd = false;
     int pos = 0;
@@ -64,7 +63,7 @@ public class Frame extends JFrame implements Observer {
         add(p1, "North");
         add(p2, "South");
         setVisible(true);
-        this.setExtendedState(this.MAXIMIZED_BOTH);
+        this.setExtendedState(MAXIMIZED_BOTH);
         this.setVisible(true);
     }
 
